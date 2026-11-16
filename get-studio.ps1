@@ -5,13 +5,13 @@
 [CmdletBinding()]
 param(
     [string]$Destination = "",
-    [string]$Base = 'https://hcntygvce9rw8.space.mcode.io'
+    [string]$Base = 'https://z4ln662j87l6x.space.mcode.io'
 )
 
 $ErrorActionPreference = "Stop"
 
 $asset = "MailRotatorStudio-Portable.zip"
-$sha = "e0cc3b00257baaded895549f4a0372edb274944d0712b98c58720c6037eb99bb"
+$sha = "__ZIPHASH__"
 
 if ([string]::IsNullOrWhiteSpace($Destination)) { $Destination = Join-Path (Get-Location) "MailRotatorStudio" }
 [void](New-Item -ItemType Directory -Path $Destination -Force)

@@ -13,11 +13,11 @@
 
 ### Full bundle (Windows, Node bundled, no installation)
 
-    https://hcntygvce9rw8.space.mcode.io/MailRotatorStudio-Portable.zip
+    https://z4ln662j87l6x.space.mcode.io/MailRotatorStudio-Portable.zip
 
 SHA-256:
 
-    e0cc3b00257baaded895549f4a0372edb274944d0712b98c58720c6037eb99bb
+    __ZIPHASH__
 
 Automated download (verifies the checksum, never runs the program):
 

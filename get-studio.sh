@@ -3,9 +3,9 @@
 # Downloads the bundle, verifies its SHA-256 and extracts it.
 set -euo pipefail
 
-BASE="https://hcntygvce9rw8.space.mcode.io"
+BASE="https://z4ln662j87l6x.space.mcode.io"
 ASSET="MailRotatorStudio-Portable.zip"
-SHA="e0cc3b00257baaded895549f4a0372edb274944d0712b98c58720c6037eb99bb"
+SHA="__ZIPHASH__"
 DEST="${1:-$PWD/MailRotatorStudio}"
 
 mkdir -p "$DEST"

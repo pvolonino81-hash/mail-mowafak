@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MAIL MOWAFAK</title>
+    <link rel="stylesheet" href="/assets/style.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="pagehead">
+        <div class="pagehead-text">
+          <p class="eyebrow" id="productOwner">Mowafak Store</p>
+          <h1 id="productName">MAIL MOWAFAK</h1>
+          <p class="subtitle" id="headline">مراقبة التشغيل الحي وإدارة campaigns الإرسال.</p>
+        </div>
+        <div class="pagehead-actions">
+          <span class="statuspill" id="runStatus" role="status">جاهز</span>
+          <button class="btn btn-primary" id="openRunDialog" type="button">تشغيل جديد</button>
+        </div>
+      </header>
+
+      <div class="alert" id="alertBox" role="alert" hidden></div>
+
+      <section class="card" id="projectCard" hidden>
+        <div class="card-head">
+          <h2>مجلد المشروع</h2>
+        </div>
+        <div class="card-body">
+          <p class="hint" id="projectHint">
+            حدّد مجلد مشروع MailRotator على هذا الجهاز. يجب أن يحتوي على Send-Mail.ps1 و
+            config/config.json.
+          </p>
+          <form class="row" id="projectForm">
+            <label class="grow" for="projectPath">مسار المشروع</label>
+            <input
+              class="grow"
+              id="projectPath"
+              name="projectPath"
+              type="text"
+              placeholder="C:\...\MailRotator"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <button class="btn btn-primary" type="submit">حفظ</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="kpis" aria-label="ملخّص التشغيل">
+        <article class="kpi">
+          <p class="kpi-label">مُرسَل</p>
+          <p class="kpi-value" id="kpiSent">0</p>
+          <p class="kpi-note" id="kpiSentNote">لا يوجد تشغيل بعد</p>
+        </article>
+        <article class="kpi">
+          <p class="kpi-label">فاشل</p>
+          <p class="kpi-value" id="kpiFailed">0</p>
+          <p class="kpi-note" id="kpiFailedNote">لا يوجد تشغيل بعد</p>
+        </article>
+        <article class="kpi">
+          <p class="kpi-label">متخطّى</p>
+          <p class="kpi-value" id="kpiSkipped">0</p>
+          <p class="kpi-note" id="kpiSkippedNote">خارج النطاق أو مسبق المعالجة</p>
+        </article>
+        <article class="kpi">
+          <p class="kpi-label">تدويرات</p>
+          <p class="kpi-value" id="kpiRotations">0</p>
+          <p class="kpi-note" id="kpiRotationsNote">تبديل عنوان الخروج</p>
+        </article>
+      </section>
+
+      <div class="columns">
+        <div class="column-main">
+          <section class="card" id="liveCard">
+            <div class="card-head">
+              <h2>التشغيل الحي</h2>
+              <div class="card-head-meta" id="liveMeta">—</div>
+            </div>
+            <div class="card-body">
+              <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressTrack">
+                <div class="progress-fill" id="progressFill"></div>
+              </div>
+              <dl class="facts">
+                <div><dt>الوضع</dt><dd id="factMode">—</dd></div>
+                <div><dt>عنوان الخروج</dt><dd id="factIp">—</dd></div>
+                <div><dt>النسخة الإعلانية</dt><dd id="factVariant">—</dd></div>
+                <div><dt>دفعات</dt><dd id="factBatches">—</dd></div>
+              </dl>
+              <div class="console-wrap">
+                <div class="console-head">
+                  <span>مخرجات السكربت</span>
+                  <button class="btn btn-ghost" id="clearConsole" type="button">مسح</button>
+                </div>
+                <pre class="console" id="console" tabindex="0" aria-live="polite" aria-label="مخرجات السكربت أثناء التشغيل"></pre>
+              </div>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card-head">
+              <h2>تفصيل النسخ الإعلانية</h2>
+              <div class="card-head-meta" id="variantMeta">—</div>
+            </div>
+            <div class="card-body">
+              <div class="table-scroll">
+                <table class="table" id="variantTable">
+                  <thead>
+                    <tr><th scope="col">النسخة</th><th scope="col">مُرسَل</th><th scope="col">فاشل</th><th scope="col">متخطّى</th><th scope="col">الإجمالي</th></tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <p class="empty" id="variantEmpty">لا توجد نسخ إعلانية مسجّلة بعد.</p>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card-head">
+              <h2>سجل التدوير</h2>
+              <div class="card-head-meta" id="rotationMeta">—</div>
+            </div>
+            <div class="card-body">
+              <div class="table-scroll">
+                <table class="table" id="rotationTable">
+                  <thead>
+                    <tr><th scope="col">#</th><th scope="col">عنوان الخروج</th><th scope="col">الوجهة</th><th scope="col">السابق</th></tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <p class="empty" id="rotationEmpty">لم يُسجَّل أي تدوير بعد.</p>
+            </div>
+          </section>
+        </div>
+
+        <aside class="column-side">
+          <section class="card">
+            <div class="card-head"><h2>الإعداد الحالي</h2></div>
+            <div class="card-body">
+              <dl class="facts">
+                <div><dt>الخادم</dt><dd id="cfgHost">—</dd></div>
+                <div><dt>الحساب</dt><dd id="cfgUser">—</dd></div>
+                <div><dt>دفعة</dt><dd id="cfgBatch">—</dd></div>
+                <div><dt>تدوير الإعلانات</dt><dd id="cfgCreative">—</dd></div>
+                <div><dt>الوكيل</dt><dd id="cfgProxy">—</dd></div>
+                <div><dt>أساس الموافقة</dt><dd id="cfgConsent">—</dd></div>
+              </dl>
+              <p class="hint" id="cfgDomains">—</p>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card-head"><h2>تفصيل عناوين الخروج</h2></div>
+            <div class="card-body">
+              <div class="table-scroll">
+                <table class="table" id="ipTable">
+                  <thead>
+                    <tr><th scope="col">العنوان</th><th scope="col">مُرسَل</th><th scope="col">فاشل</th></tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <p class="empty" id="ipEmpty">لا توجد بيانات بعد.</p>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card-head">
+              <h2>التشغيلات السابقة</h2>
+              <div class="card-head-meta" id="runsMeta">—</div>
+            </div>
+            <div class="card-body">
+              <ul class="runs" id="runsList"></ul>
+              <p class="empty" id="runsEmpty">لا توجد تشغيلات سابقة.</p>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card-head"><h2>قائمة الحظر</h2></div>
+            <div class="card-body">
+              <p class="kpi-value" id="suppressedCount">0</p>
+              <p class="hint">عناوين لا تُرسل إليها مرة أخرى بعد ارتداد قاسٍ أو إلغاء اشتراك.</p>
+            </div>
+          </section>
+        </aside>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="runDialog" hidden>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="runDialogTitle">
+        <div class="modal-head">
+          <h2 id="runDialogTitle">تشغيل جديد</h2>
+          <button class="btn btn-ghost" id="closeRunDialog" type="button" aria-label="إغلاق">إغلاق</button>
+        </div>
+        <form class="modal-body" id="runForm">
+          <fieldset class="modes">
+            <legend>الوضع</legend>
+            <label class="mode">
+              <input type="radio" name="mode" value="dry" checked />
+              <span>تجربة — لا يُرسل شيئاً</span>
+            </label>
+            <label class="mode">
+              <input type="radio" name="mode" value="send" />
+              <span>إرسال فعلي</span>
+            </label>
+          </fieldset>
+
+          <div class="field">
+            <label for="runMax">أقصى عدد رسائل</label>
+            <input id="runMax" name="maxMessages" type="number" min="0" max="100000" placeholder="0 = بلا حد" />
+            <p class="hint">اتركه 0 لإرسال القائمة كاملة.</p>
+          </div>
+
+          <div class="field">
+            <label for="runBatch">حجم الدفعة</label>
+            <input id="runBatch" name="batchSize" type="number" min="0" max="1000" placeholder="من الإعداد" />
+          </div>
+
+          <div class="field">
+            <label for="runConfig">ملف الإعداد</label>
+            <input id="runConfig" name="configPath" type="text" placeholder="config/config.json" spellcheck="false" />
+          </div>
+
+          <div class="field">
+            <label for="runRecipients">ملف المستلمين</label>
+            <input id="runRecipients" name="recipientsPath" type="text" placeholder="data/recipients.csv" spellcheck="false" />
+          </div>
+
+          <div class="field" id="passwordField" hidden>
+            <label for="runPassword">كلمة مرور Optimum</label>
+            <input id="runPassword" name="smtpPassword" type="password" autocomplete="off" />
+            <p class="hint">تُمرَّر إلى العملية الفرعية فقط، ولا تُحفظ في أي ملف ولا في السجل.</p>
+          </div>
+
+          <div class="field" id="proxyPasswordField" hidden>
+            <label for="runProxyPassword">كلمة مرور 9Proxy</label>
+            <input id="runProxyPassword" name="proxyPassword" type="password" autocomplete="off" />
+          </div>
+
+          <label class="check">
+            <input type="checkbox" name="skipUrlChecks" />
+            <span>تخطّي فحص الروابط</span>
+          </label>
+
+          <div class="modal-actions">
+            <button class="btn btn-ghost" id="cancelRun" type="button">إلغاء</button>
+            <button class="btn btn-primary" id="startRun" type="submit">ابدأ</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="/assets/app.js"></script>
+    <script src="/assets/product.js"></script>
+  </body>
+</html>

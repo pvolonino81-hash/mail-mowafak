@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MAIL MOWAFAK — دليل التشغيل الكامل</title>
+<style>
+  :root{
+    --ink:#0b1017; --panel:#121a24; --panel2:#17212d; --line:#22303f;
+    --text:#e8eef6; --muted:#93a6bb; --azure:#2e8ce8; --navy:#0a2a4a;
+    --gold:#f5b301; --green:#3fb950; --red:#f0574a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ink);color:var(--text);
+    font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic",Arial,sans-serif;line-height:1.85;font-size:16px}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px 90px}
+  header.hero{border-bottom:1px solid var(--line);background:linear-gradient(160deg,#0d1b2b,#0b1017 60%);padding:44px 0 38px}
+  .hero-in{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+  .hero img{width:78px;height:78px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+  h1{font-size:2rem;margin:0 0 6px;letter-spacing:-.4px}
+  .sub{color:var(--muted);margin:0}
+  h2{font-size:1.45rem;margin:52px 0 14px;padding-inline-start:14px;border-inline-start:4px solid var(--azure)}
+  h3{font-size:1.08rem;margin:28px 0 10px;color:#cfe0f2}
+  p{margin:10px 0}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0}
+  .steps{counter-reset:s}
+  .step{position:relative;padding-inline-start:54px;margin:26px 0}
+  .step:before{counter-increment:s;content:counter(s);position:absolute;inset-inline-start:0;top:2px;
+    width:36px;height:36px;border-radius:50%;background:linear-gradient(140deg,var(--azure),#17569c);
+    color:#fff;font-weight:700;display:grid;place-items:center;font-size:1rem}
+  pre{background:#0a0f16;border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;
+    font-family:Consolas,"Cascadia Mono",monospace;font-size:13.5px;line-height:1.7;direction:ltr;text-align:left;margin:14px 0}
+  code{background:#0a0f16;border:1px solid var(--line);border-radius:6px;padding:2px 7px;font-family:Consolas,monospace;
+    font-size:.9em;direction:ltr;display:inline-block}
+  pre code{background:none;border:0;padding:0;color:#dbe7f3}
+  .ok{color:var(--green)} .warn{color:var(--gold)} .bad{color:var(--red)} .dim{color:var(--muted)}
+  .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin:16px 0}
+  .tile{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .tile b{display:block;color:var(--gold);font-size:.95rem;margin-bottom:4px}
+  .tile span{color:var(--muted);font-size:.9rem}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.93rem}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:start;vertical-align:top}
+  th{background:var(--panel2);color:#cfe0f2}
+  .note{border-inline-start:4px solid var(--gold);background:#1a1408;border-radius:10px;padding:12px 16px;margin:16px 0}
+  .good{border-inline-start:4px solid var(--green);background:#0c1a10;border-radius:10px;padding:12px 16px;margin:16px 0}
+  figure{margin:20px 0;text-align:center}
+  figcaption{color:var(--muted);font-size:.88rem;margin-top:8px}
+  svg{max-width:100%;height:auto}
+  .pill{display:inline-block;background:#16283c;border:1px solid #2b4763;border-radius:999px;padding:3px 12px;
+    font-size:.82rem;color:#9fd0ff;margin-inline-end:6px}
+  footer{margin-top:60px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted);font-size:.88rem}
+  ul,ol{padding-inline-start:22px}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap hero-in">
+    <img src="assets/mowafak-logo.png" alt="شعار موثق">
+    <div>
+      <h1>MAIL MOWAFAK — دليل التشغيل الكامل</h1>
+      <p class="sub">مُرسل جماعي عبر SMTP مع تدوير عنوان الخروج — نسخة بيضاء العلامة تخدم عدة عملاء من ملف واحد</p>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<div class="card">
+  <b class="ok">الخلاصة في ثلاثة أوامر:</b>
+  <pre><code>cd MailRotator
+.\tools\Send-Campaign.ps1 -List
+.\tools\Send-Campaign.ps1 -ClientId example -RecipientsPath .\data\recipients.example.txt -DryRun
+.\tools\Send-Campaign.ps1 -ClientId example -RecipientsPath .\data\recipients.txt</code></pre>
+  <p class="dim">الأمر الأول يعرض العملاء، والثاني يجرّب الحملة بلا إرسال، والثالث يرسلها.</p>
+</div>
+
+<h2>١. كيف يعمل النظام</h2>
+<p>الميلر برنامج واحد يخدم أكثر من عميل. كل عميل ملف واحد يحدّد اسمه وهويته ورسالته وصندوق مرسّله وحسابات SMTP، ولا يرى المستلم إلا بيانات عميله — لا اسم البرنامج ولا شعاره.</p>
+
+<figure>
+<svg viewBox="0 0 960 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="مخطط تشغيلي">
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#123a63"/><stop offset="1" stop-color="#1a6acc"/>
+    </linearGradient>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#6f8ba6"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="340" fill="#0d141d" rx="14"/>
+  <text x="24" y="34" fill="#7f95ab" font-size="13" font-family="Segoe UI">نَفَس الرسالة</text>
+
+  <rect x="30" y="60" width="190" height="96" rx="12" fill="#14202e" stroke="#2a3d51"/>
+  <text x="48" y="88" fill="#e8eef6" font-size="15" font-weight="600">ملف العميل</text>
+  <text x="48" y="112" fill="#93a6bb" font-size="12.5">client.json</text>
+  <text x="48" y="134" fill="#93a6bb" font-size="12.5">الاسم • الهوية • الرسالة</text>
+
+  <rect x="285" y="60" width="190" height="96" rx="12" fill="#14202e" stroke="#2a3d51"/>
+  <text x="303" y="88" fill="#e8eef6" font-size="15" font-weight="600">قائمة المستلمين</text>
+  <text x="303" y="112" fill="#93a6bb" font-size="12.5">CSV أو نصي (١٠ آلاف)</text>
+  <text x="303" y="134" fill="#93a6bb" font-size="12.5">نطاق محدّد • قائمة منع</text>
+
+  <rect x="540" y="46" width="230" height="124" rx="12" fill="url(#bg1)" stroke="#2f7fd0"/>
+  <text x="560" y="78" fill="#ffffff" font-size="16" font-weight="700">محرّك MailRotator</text>
+  <text x="560" y="102" fill="#d9e9fb" font-size="12.5">فحص قبل الإرسال</text>
+  <text x="560" y="124" fill="#d9e9fb" font-size="12.5">فلتر الصياغة • تدوير ١٥٠</text>
+  <text x="560" y="146" fill="#d9e9fb" font-size="12.5">بوابة سلامة موقّعة</text>
+
+  <rect x="830" y="26" width="100" height="100" rx="14" fill="#0f1a26" stroke="#2a3d51"/>
+  <image href="assets/mowafak-logo.png" x="856" y="42" width="48" height="48"/>
+  <text x="880" y="142" fill="#7f95ab" font-size="11" text-anchor="middle">شعار الميلر</text>
+
+  <rect x="540" y="220" width="230" height="86" rx="12" fill="#14202e" stroke="#2a3d51"/>
+  <text x="558" y="248" fill="#e8eef6" font-size="14.5" font-weight="600">حسابات SMTP</text>
+  <text x="558" y="270" fill="#93a6bb" font-size="12.5">Optimum • Suddenlink</text>
+  <text x="558" y="291" fill="#93a6bb" font-size="12.5">Outlook • Microsoft 365</text>
+
+  <rect x="270" y="220" width="210" height="86" rx="12" fill="#14202e" stroke="#2a3d51"/>
+  <text x="288" y="248" fill="#e8eef6" font-size="14.5" font-weight="600">دوران عنوان الخروج</text>
+  <text x="288" y="270" fill="#93a6bb" font-size="12.5">كل ١٥٠ رسالة عنوان جديد</text>
+  <text x="288" y="291" fill="#93a6bb" font-size="12.5">تسجيل كامل في التقرير</text>
+
+  <rect x="30" y="220" width="180" height="86" rx="12" fill="#14202e" stroke="#2a3d51"/>
+  <text x="48" y="248" fill="#e8eef6" font-size="14.5" font-weight="600">نقطة الاستقبال</text>
+  <text x="48" y="270" fill="#93a6bb" font-size="12.5">رابط شورت + تتبّع</text>
+  <text x="48" y="291" fill="#93a6bb" font-size="12.5">صفحة إلغاء الاشتراك</text>
+
+  <line x1="220" y1="108" x2="278" y2="108" stroke="#6f8ba6" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="475" y1="108" x2="533" y2="108" stroke="#6f8ba6" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="655" y1="170" x2="655" y2="214" stroke="#6f8ba6" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="540" y1="263" x2="487" y2="263" stroke="#6f8ba6" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="270" y1="263" x2="217" y2="263" stroke="#6f8ba6" stroke-width="2" marker-end="url(#ar)"/>
+  <line x1="120" y1="220" x2="120" y2="163" stroke="#6f8ba6" stroke-width="2" marker-end="url(#ar)"/>
+</svg>
+<figcaption>المسار الكامل: ملف العميل والقائمة يدخلان المحرّك، والمحرّك يخرج رسالة باسم العميل عبر حساب SMTP، ويدوّر عنوان الخروج كل ١٥٠ رسالة.</figcaption>
+</figure>
+
+<div class="note">
+<b>قاعدة العلامة:</b> شعار «موفق» هو شعار <b>البرنامج</b> فقط. يظهر في لوحة التحكم وملفات البرنامج، ولا يظهر أبداً في الرسائل. كل ما يراه المستلم — الاسم، الشعار، البريد، العنوان البريدي — يأتي من ملف العميل.
+</div>
+
+<h2>٢. الخطوة الأولى: ملف العميل</h2>
+<div class="step">
+<h3>أنشئ مجلد عميل</h3>
+<p>كل عميل له مجلد داخل <code>clients/</code>:</p>
+<pre><code>clients\
+  acme\
+    client.json      ← بيانات العميل
+    message.html     ← رسالته (اختياري)</code></pre>
+<p>إن كان العميل لا يحتاج رسالة خاصة، يكفي ملف واحد: <code>clients/acme.json</code>.</p>
+</div>
+
+<div class="step">
+<h3>املأ ملف <code>client.json</code></h3>
+<pre><code>{
+  "id": "acme",
+  "name": "Acme Store",
+  "smtp": {
+    "provider": "suddenlink",
+    "username": "sender@suddenlink.net",
+    "passwordEnv": "OPTONLINE_SMTP_PASSWORD",
+    "label": "sb-1"
+  },
+  "message": {
+    "brandName": "Acme Store",
+    "logoUrl": "https://your-domain.com/acme-logo.png",
+    "fromName": "Acme Store",
+    "fromEmail": "sender@suddenlink.net",
+    "replyTo": "sender@suddenlink.net",
+    "subject": "Hi {{first_name}}, your {{brand_name}} order is ready",
+    "templatePath": "message.html",
+    "landingUrl": "https://your-domain.com/offer.html",
+    "unsubscribeUrl": "https://your-domain.com/unsubscribe.html",
+    "listUnsubscribe": "https://your-domain.com/unsubscribe.html",
+    "physicalAddress": "Acme Store, 12 Example Street, New York, NY 10001, USA",
+    "messageIdHost": "your-domain.com",
+    "allowedDomains": ["charter.net", "spectrum.net"]
+  }
+}</code></pre>
+<table>
+<tr><th>الحقل</th><th>ماذا يحدّد</th></tr>
+<tr><td><code>brandName</code></td><td>الاسم الذي يظهر في الرسالة وفي التقرير</td></tr>
+<tr><td><code>logoUrl</code></td><td>رابط شعار العميل داخل الرسالة</td></tr>
+<tr><td><code>fromName / fromEmail</code></td><td>اسم المرسّل وصندوقه (يجب أن يطابق حساب SMTP)</td></tr>
+<tr><td><code>templatePath</code></td><td>رسالة العميل — تُبحث بجوار ملف العميل أولاً</td></tr>
+<tr><td><code>physicalAddress</code></td><td>العنوان البريدي — إلزامي قانونياً (CAN-SPAM)</td></tr>
+<tr><td><code>allowedDomains</code></td><td>النطاقات المسموح إرسالها فقط</td></tr>
+<tr><td><code>provider</code></td><td>عائلة مزوّد البريد: optimum أو suddenlink أو outlook أو office365 أو auto</td></tr>
+<tr><td><code>passwordEnv</code></td><td>اسم متغيّر البيئة الذي يحمل كلمة المرور — لا تُكتب كلمة المرور في الملف أبداً</td></tr>
+</table>
+</div>
+
+<div class="step">
+<h3>ضع المتغيّرات في رسالتك</h3>
+<p>في <code>message.html</code> استخدم هذه الرموز، ويملؤها المحرك لكل مستلم:</p>
+<div class="grid">
+  <div class="tile"><b>{{brand_name}}</b><span>اسم العلامة</span></div>
+  <div class="tile"><b>{{first_name}}</b><span>الاسم الأول</span></div>
+  <div class="tile"><b>{{name}}</b><span>الاسم الكامل</span></div>
+  <div class="tile"><b>{{company}}</b><span>الشركة (عمود في القائمة)</span></div>
+  <div class="tile"><b>{{logo_url}}</b><span>شعار العميل</span></div>
+  <div class="tile"><b>{{physical_address}}</b><span>العنوان البريدي</span></div>
+  <div class="tile"><b>{{tracking_link}}</b><span>رابط التتبّع</span></div>
+  <div class="tile"><b>{{unsubscribe_link}}</b><span>رابط إلغاء الاشتراك</span></div>
+</div>
+</div>
+
+<h2>٣. الخطوة الثانية: قائمة المستلمين</h2>
+<p>القائمة إمّا <b>CSV</b> (كل الأعمدة تعمل كرموز) أو <b>ملف نصي</b> ببساطة:</p>
+<pre><code>jane.doe@charter.net,Jane Doe
+john.roe@spectrum.net,John Roe
+sample.user@neo.rr.com</code></pre>
+<ul>
+<li>سطر واحد لكل عنوان، والاسم اختياري بعد الفاصلة.</li>
+<li>الأسطر الفارغة والخطوط التي تبدأ بـ <code>#</code> تُتجاهل.</li>
+<li>العنوان غير الصالح يُحذف تلقائياً، والمكرَّر يُحتفظ به مرة واحدة.</li>
+<li><b>١٠ آلاف سطر تُحمَّل في أقل من ثانية</b>، والحالة تُحفظ بـ HashSet فلا يتباطأ الفهرس.</li>
+</ul>
+<div class="good">
+<b>ملاحظة أداء:</b> الحفظ يستعمل <code>HashSet</code> بدل قائمة خطية، لذلك البحث عن عنوان داخل ١٠ آلاف سجل يبقى ثابت السرعة بدل أن يُفحص السجل كاملاً في كل رسالة.
+</div>
+
+<h2>٤. الخطوة الثالثة: حسابات SMTP</h2>
+<p>حساب واحد يكفي، لكن عدّة حسابات تمنع التوقف عند خنق مزوّد لحساب واحد. ضعها في قائمة:</p>
+<pre><code>"smtp": {
+  "accounts": [
+    { "provider": "suddenlink", "username": "one@suddenlink.net", "passwordEnv": "OPTONLINE_SMTP_PASSWORD", "label": "sb-1" },
+    { "provider": "suddenlink", "username": "two@suddenlink.net", "passwordEnv": "OPTONLINE_SMTP_PASSWORD", "label": "sb-2" },
+    { "provider": "outlook",    "username": "three@outlook.com",  "passwordEnv": "OUTLOOK_SMTP_PASSWORD",  "label": "out-1" }
+  ]
+}</code></pre>
+<figure>
+<svg viewBox="0 0 900 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="مخطط تبديل الحسابات">
+  <rect x="0" y="0" width="900" height="250" fill="#0d141d" rx="14"/>
+  <rect x="40" y="40" width="180" height="80" rx="12" fill="#14202e" stroke="#2a3d51"/>
+  <text x="130" y="72" fill="#e8eef6" font-size="14" text-anchor="middle" font-weight="600">sb-1</text>
+  <text x="130" y="94" fill="#93a6bb" font-size="12" text-anchor="middle">sb-2</text>
+  <text x="130" y="112" fill="#93a6bb" font-size="12" text-anchor="middle">out-1</text>
+  <rect x="290" y="40" width="220" height="80" rx="12" fill="#14202e" stroke="#2a3d51"/>
+  <text x="400" y="72" fill="#e8eef6" font-size="14" text-anchor="middle" font-weight="600">رسالة واحدة</text>
+  <text x="400" y="94" fill="#93a6bb" font-size="12" text-anchor="middle">تحاول الحساب الأول</text>
+  <text x="400" y="112" fill="#f5b301" font-size="12" text-anchor="middle">535 أو 421 أو انقطاع</text>
+  <rect x="580" y="40" width="250" height="80" rx="12" fill="#10251a" stroke="#2c5c3c"/>
+  <text x="705" y="72" fill="#8fe0a8" font-size="14" text-anchor="middle" font-weight="600">تنتقل إلى الحساب التالي</text>
+  <text x="705" y="94" fill="#93a6bb" font-size="12" text-anchor="middle">وتُعاد الرسالة نفسها</text>
+  <text x="705" y="112" fill="#93a6bb" font-size="12" text-anchor="middle">العملية لا تتوقف</text>
+  <line x1="220" y1="80" x2="284" y2="80" stroke="#6f8ba6" stroke-width="2"/>
+  <line x1="510" y1="80" x2="574" y2="80" stroke="#6f8ba6" stroke-width="2"/>
+  <path d="M705 120 L705 160 L130 160 L130 126" fill="none" stroke="#3fb950" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="417" y="182" fill="#3fb950" font-size="12.5" text-anchor="middle">وتبدأ الدفعة التالية بالحساب التالي — كل ١٥٠ رسالة</text>
+  <text x="40" y="225" fill="#7f95ab" font-size="12.5">قاعدة مغلقة: 421 · 450 · 451 · 535 · انقطاع الشبكة</text>
+</svg>
+<figcaption>عند فشل حساب، تنتقل الرسالة إلى الحساب التالي فوراً، وتبدأ الدفعة التالية على حساب مختلف.</figcaption>
+</figure>
+<div class="note">
+<b>قاعدة المزوّد:</b> مزوّد Optimum يرفض <code>MAIL FROM</code> إذا لم يطابق الحساب المُصادَق عليه. المحرّك يستخدم عنوان الحساب كمرسل الغلاف تلقائياً، فتبقى الرسالة صالحة دائماً.
+</div>
+
+<h2>٤-ب. البروكسي: استبدال عنوان الخروج</h2>
+<p>الميلر يخرج عبر بروكسي سكني ويبدّل عنوان الخروج كل ١٥٠ رسالة. ثلاث عائلات مدعومة، والحساب والمضيف والمنفذ وكلمة المرور تأتي منك دائماً:</p>
+<div class="grid">
+  <div class="tile"><b>9Proxy</b><span>acct-country-us-st-ny-city-nyc-isp-x-sst-10-ssid-&lt;session&gt;</span></div>
+  <div class="tile"><b>711Proxy</b><span>acct-zone-custom-region-US-st-Florida-city-Miami-sessTime-5-session-(&lt;session&gt;)</span></div>
+  <div class="tile"><b>مخصّص</b><span>نمط تكتبه أنت: {country} {state} {city} {session} {sessionTime}</span></div>
+</div>
+<pre><code>"proxy": {
+  "provider": "711proxy",
+  "mode": "gateway",
+  "host": "gate.711proxy.com",
+  "port": 12345,
+  "usernameTemplate": "your-sub-account",
+  "passwordEnv": "SEVEN11PROXY_PASSWORD",
+  "country": "us",
+  "state": "Florida",
+  "city": "Miami",
+  "sessionTimeMinutes": 5,
+  "rotationEvery": 150
+}</code></pre>
+<p>قبل الحملة افحص البوابة وتأكّد أن العناوين تتبدّل فعلاً:</p>
+<pre><code>.\tools\Test-Proxy.ps1 -ClientId example -Count 3</code></pre>
+<table>
+<tr><th>الوضع</th><th>ماذا يعني</th></tr>
+<tr><td><code>gateway</code></td><td>مضيف ومنفذ ثابتان، وتبديل عنوان الخروج برمز الجلسة داخل اسم المستخدم</td></tr>
+<tr><td><code>ports</code></td><td>مضيف واحد وقائمة منافذ، كل منفذ = عنوان خروج مختلف (711Proxy By Port)</td></tr>
+<tr><td><code>local</code></td><td>تطبيق 9Proxy على سطح المكتب يوجّه عنواناً سكنياً إلى 127.0.0.1</td></tr>
+<tr><td><code>none</code></td><td>بلا بروكسي — الإرسال بعنوان الجهاز</td></tr>
+</table>
+<p class="dim">اسم المتغيّر الذي يحمل كلمة المرور يحدّده المزوّد تلقائياً: <code>NINEPROXY_PASSWORD</code> لـ9Proxy و<code>SEVEN11PROXY_PASSWORD</code> لـ711Proxy، ويمكنك تجاوزه في الملف.</p>
+
+<h2>٥. الخطوة الرابعة: التشغيل</h2>
+<div class="step">
+<h3>اعرف ما سترسله قبل أن ترسله</h3>
+<p>التشغيل التجريبي يبني الرسالة ويفحصها ويكتب ملف المعاينة وخطة الإرسال، ولا يرسل شيئاً:</p>
+<pre><code>.\tools\Send-Campaign.ps1 -ClientId acme -RecipientsPath .\data\recipients.txt -DryRun</code></pre>
+<p>وهذا ناتج تشغيل حقيقي من هذا الجهاز:</p>
+<pre><code>  MAILROTATOR  -  campaign summary
+
+  client        : example
+  brand         : My Account
+  sender        : sender@suddenlink.net
+  subject       : Hi {{first_name}}, your {{brand_name}} order is ready
+  template      : message.html
+  landing page  : https://hcntygvce9rw8.space.mcode.io/offer.html
+  audience      : charter.net, spectrum.net, neo.rr.com, roadrunner.com, carolina.rr.com
+  batch size    : 150
+  smtp account  : suddenlink-1 (sender@suddenlink.net)
+  state folder  : ...\MailRotator\state\example
+
+  MAILROTATOR  -  bulk sender with rotating egress IPs
+  client  : example  (My Account)
+  integrity: verified (19 protected files)
+
+[INFO] Loaded 3 recipient rows from ...\data\recipients.example.txt.
+[INFO] Loaded 2 creative variant(s); rotating every 150 messages.
+[INFO] SMTP accounts: suddenlink-1
+[INFO] Restricting recipients to: charter.net, spectrum.net, neo.rr.com, roadrunner.com, carolina.rr.com
+[INFO] Planned 3 messages in batches of 150.
+
+--- PREFLIGHT ---
+  [WARN] no-spf: No SPF record found for 'suddenlink.net'.
+  [WARN] no-dkim: No DKIM record found for 'default._domainkey.suddenlink.net'.
+  [WARN] no-dmarc: No DMARC record found for '_dmarc.suddenlink.net'.
+  RESULT: PASSED
+
+--- CREATIVE ROTATION PLAN ---
+  block  1: variant 'v1'  messages 1-150
+             link  : https://hcntygvce9rw8.space.mcode.io/offer.html
+  block  2: variant 'v2'  messages 151-300
+             link  : https://hcntygvce9rw8.space.mcode.io/offer.html?v=2
+
+--- WORDING FILTER ---
+  terms in the built-in list : 44
+  replaced in the preview     : 0
+
+Dry run complete. Nothing was sent.</code></pre>
+</div>
+
+<div class="step">
+<h3>أرسل</h3>
+<pre><code>.\tools\Send-Campaign.ps1 -ClientId acme -RecipientsPath .\data\recipients.txt</code></pre>
+<p>السؤال عن كلمة المرور يظهر بمصفوف مخفي، وتبقى في ذاكرة العملية فقط، ولا تُكتب في أي ملف أو تقرير.</p>
+</div>
+
+<div class="step">
+<h3>أكمل ما توقّف أو أوقفه</h3>
+<pre><code>.\tools\Send-Campaign.ps1 -ClientId acme -RecipientsPath .\data\recipients.txt -Resume</code></pre>
+<p>نقطة الاستئناف محفوظة في <code>state\&lt;العميل&gt;\checkpoint.json</code>، والمستلِمون المُعالَجون لا يُرسلون مرة ثانية.</p>
+</div>
+
+<div class="step">
+<h3>راقب أثناء الإرسال</h3>
+<pre><code>.\tools\Monitor-MailRotator.ps1 -ClientId acme -IntervalSeconds 5</code></pre>
+</div>
+
+<h2>٦. فلتر الصياغة</h2>
+<p>الرسالة تُرسَل كما هي، ما عدا الكلمات التي ترتبط ارتباطاً وثيقاً بالرسائل غير المرغوبة. الفلتر يبدّلها بمقابل محايد، ولا يمسّ الروابط ولا الاسم ولا النطاق:</p>
+<div class="grid">
+  <div class="tile"><b>free → complimentary</b><span>مجاني → مجاناً</span></div>
+  <div class="tile"><b>click here → open the link below</b><span>اضغط هنا → افتح الرابط بالأسفل</span></div>
+  <div class="tile"><b>guaranteed → assured</b><span>مضمون → مؤكَّد</span></div>
+  <div class="tile"><b>act now → when you are ready</b><span>افعل الآن → عندما تكون جاهزاً</span></div>
+</div>
+<ul>
+<li>في HTML لا يُلمس إلا النص بين الوسوم، فكل <code>href</code> و<code>src</code> تبقى كما هي بالحرف.</li>
+<li>٤٤ كلمة جاهزة، ويمكن للعميل إضافة كلماته: <code>message.spamFilter.terms</code>.</li>
+<li>لإيقافه لعميل معيّن: <code>"enabled": false</code>.</li>
+<li>عدد الاستبدالات يُعرض في التشغيل التجريبي ويُسجَّل في التقرير.</li>
+</ul>
+
+<h2>٧. الروابط المختصرة</h2>
+<p>عند تفعيل <code>message.linkService</code> يصير الرابط في الرسالة قصيراً على نطاقك، ويبقى الملف <code>links.json</code> هو المرجع الذي resolves الرابط:</p>
+<pre><code>"linkService": { "enabled": true, "baseUrl": "https://s.your-domain.com" }</code></pre>
+<pre><code>الرابط في الرسالة : https://s.your-domain.com/s/Ab3xY9zZ?uid=&lt;token&gt;
+الملف المنشور     : links.json  ←  { "Ab3xY9zZ": { "target": "..." } }
+</code></pre>
+<p>الكود ثابت لكل نسخة إعلانية، والرمز يميّز كل مستلم، والتحويل ينقل الزائر إلى صفحة الهبوط مع رمزه.</p>
+
+<h2>٨. الخلاصة والامتثال</h2>
+<div class="grid">
+  <div class="tile"><b>قائمة موافقة</b><span>قائمة opt-in موثّقة، وسجل للمنع</span></div>
+  <div class="tile"><b>نطاق محدّد</b><span>لا يخرج إرسال خارج allowedDomains</span></div>
+  <div class="tile"><b>إلغاء الاشتراك</b><span>ترويسة List-Unsubscribe ونقرة واحدة</span></div>
+  <div class="tile"><b>عنوان بريدي</b><span>إلزامي في كل رسالة</span></div>
+  <div class="tile"><b>توقيع رقمي</b><span>١٩ ملفاً محمياً ببوابة سلامة موقّعة</span></div>
+  <div class="tile"><b>سجل كامل</b><span>كل رسالة وكل عنوان خروج في التقرير</span></div>
+</div>
+
+<h2>٩. خريطة الملفات</h2>
+<pre><code>MailRotator\
+  Send-Mail.ps1            ← نقطة الدخول التقنية (محمية)
+  config\config.json       ← الإعدادات الأساسية
+  config\template.html     ← القالب العام
+  lib\Client.ps1           ← طبقة العملاء والمزوّدين
+  lib\Message.ps1          ← بناء الرسالة + فلتر الصياغة
+  lib\Smtp.ps1             ← بروتوكول SMTP
+  lib\State.ps1            ← نقطة الاستئناف + قائمة المنع
+  clients\acme\client.json ← عميل
+  data\recipients.txt      ← قائمتك
+  logs\acme\               ← تقارير هذا العميل
+  state\acme\              ← نقطة الاستئناف لهذا العميل
+  assets\mowafak-logo.png  ← شعار الميلر (موقّع)
+  tools\Send-Campaign.ps1  ← ★ الأداة التي تستخدمها</code></pre>
+
+<h2>١٠. عند مواجهة مشكلة</h2>
+<table>
+<tr><th>المشكلة</th><th>السبب</th><th>الحل</th></tr>
+<tr><td><code>INTEGRITY CHECK FAILED</code></td><td>ملف محمي تغيّر</td><td>أعد التوقيع بـ <code>tools\Protect-MailRotator.ps1</code> بالمفتاح الخاص</td></tr>
+<tr><td><code>535</code></td><td>بيانات اعتماد خاطئة لهذا المعرّف</td><td>تحقّق من الحساب: <code>mail.optonline.net:587</code> مع <code>AUTH LOGIN</code></td></tr>
+<tr><td><code>553 does not match authenticated name</code></td><td>عنوان المرسل لا يطابق الحساب</td><td>اضبط <code>fromEmail</code> على نفس الحساب — المحرّك يضبطه تلقائياً</td></tr>
+<tr><td>لم يُرسل شيء</td><td>النطاق خارج القائمة</td><td>انظر تقرير التشغيل: <code>domain-not-allowed</code> مسجّل كتخطٍّ لا كخطأ</td></tr>
+<tr><td>لم يُطلب كلمة المرور</td><td>المتغيّر موجود مسبقاً</td><td>أضف <code>-Force</code> لإجعار إعادة السؤال</td></tr>
+<tr><td>الرابط لا يعمل</td><td>لم يُنشر <code>links.json</code></td><td>انشره بجوار صفحة التحويل</td></tr>
+</table>
+
+<footer>
+دليل MailRotator — الشعار الظاهر هو شعار البرنامج، ولا يظهر في أي رسالة. كل عميل يُدار بملف مستقل وحالة مستقلة.
+</footer>
+
+</div>
+</body>
+</html>

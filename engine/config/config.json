@@ -1,0 +1,96 @@
+{
+    "consentBasis":  "opt-in",
+    "smtp":  {
+                 "provider":  "auto",
+                 "host":  "smtp.example.com",
+                 "port":  0,
+                 "encryption":  "starttls",
+                 "username":  "your-account@example.com",
+                 "passwordEnv":  "OPTONLINE_SMTP_PASSWORD",
+                 "password":  "",
+                 "heloDomain":  "example.com",
+                 "timeoutMs":  30000
+             },
+    "proxy":  {
+                  "provider":  "9proxy",
+                  "mode":  "none",
+                  "host":  "",
+                  "port":  0,
+                  "transport":  "http",
+                  "usernameTemplate":  "",
+                  "passwordEnv":  "",
+                  "password":  "",
+                  "country":  "us",
+                  "state":  "",
+                  "city":  "",
+                  "isp":  "",
+                  "zone":  "",
+                  "sessionTimeMinutes":  0,
+                  "paramSeparator":  "-",
+                  "rotationEvery":  150,
+                  "localPorts":  [
+
+                                 ],
+                  "egressCheck":  {
+                                      "host":  "api.ipify.org",
+                                      "port":  443,
+                                      "path":  "/"
+                                  }
+              },
+    "batch":  {
+                  "size":  150,
+                  "delayBetweenMessagesMs":  1200
+              },
+    "message":  {
+                    "campaignId":  "",
+                    "brandName":  "Brand Name",
+                    "logoUrl":  "",
+                    "fromName":  "Brand Name",
+                    "fromEmail":  "your-account@example.com",
+                    "replyTo":  "your-account@example.com",
+                    "subject":  "Hi {{first_name}}, your {{brand_name}} order is ready",
+                    "templatePath":  "config/template.html",
+                    "textTemplatePath":  "",
+                    "landingUrl":  "https://hcntygvce9rw8.space.mcode.io/offer.html",
+                    "trackingParameter":  "uid",
+                    "unsubscribeUrl":  "https://hcntygvce9rw8.space.mcode.io/unsubscribe.html",
+                    "listUnsubscribe":  "https://hcntygvce9rw8.space.mcode.io/unsubscribe.html",
+                    "physicalAddress":  "REPLACE WITH YOUR POSTAL ADDRESS",
+                    "messageIdHost":  "hcntygvce9rw8.space.mcode.io",
+                    "dkimSelector":  "default",
+                    "requireUnsubscribe":  true,
+                    "rotateEvery":  150,
+                    "allowedDomains":  [
+                                           "charter.net",
+                                           "spectrum.net",
+                                           "neo.rr.com"
+                                       ],
+                    "blockedDomains":  [
+
+                                       ],
+                    "linkService":  {
+                                        "enabled":  false,
+                                        "baseUrl":  ""
+                                    },
+                    "spamFilter":  {
+                                       "enabled":  true,
+                                       "terms":  {
+
+                                                 }
+                                   },
+                    "variants":  [
+                                     {
+                                         "id":  "v1",
+                                         "subject":  "Hi {{first_name}}, your {{brand_name}} order is ready",
+                                         "templatePath":  "config/template.html",
+                                         "landingUrl":  "https://hcntygvce9rw8.space.mcode.io/offer.html"
+                                     },
+                                     {
+                                         "id":  "v2",
+                                         "subject":  "{{first_name}}, a quick look at your order",
+                                         "templatePath":  "config/variant-2.html",
+                                         "shortLink":  "https://hcntygvce9rw8.space.mcode.io/offer.html?v=2"
+                                     }
+                                 ]
+                }
+}

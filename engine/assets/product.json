@@ -1,0 +1,9 @@
+{
+  "name": "MAIL MOWAFAK",
+  "tagline": "مُرسَل جماعي عبر SMTP مع تدوير عنوان الخروج",
+  "version": "1.0.0",
+  "owner": "Mowafak Store",
+  "logo": "assets/mowafak-logo.png",
+  "locked": true,
+  "note": "This file is covered by the signed manifest. Changing it makes the tool refuse to run. The product name never appears in a sent message: every campaign carries the brand of the client it was configured for."
+}

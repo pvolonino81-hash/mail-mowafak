@@ -1,0 +1,5 @@
+# One address per line. A name may follow after a comma.
+# Blank lines and lines that start with # are ignored.
+jane.doe@charter.net,Jane Doe
+john.roe@spectrum.net,John Roe
+sample.user@neo.rr.com

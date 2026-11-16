@@ -1,0 +1,93 @@
+{
+    "consentBasis":  "opt-in",
+    "smtp":  {
+                 "provider":  "suddenlink",
+                 "host":  "smtp.example.com",
+                 "port":  587,
+                 "encryption":  "starttls",
+                 "username":  "your-account@example.com",
+                 "passwordEnv":  "OPTONLINE_SMTP_PASSWORD",
+                 "password":  "",
+                 "heloDomain":  "example.com",
+                 "timeoutMs":  30000
+             },
+    "proxy":  {
+                  "mode":  "none",
+                  "host":  "",
+                  "port":  0,
+                  "transport":  "http",
+                  "usernameTemplate":  "",
+                  "passwordEnv":  "",
+                  "password":  "",
+                  "country":  "us",
+                  "state":  "",
+                  "city":  "",
+                  "isp":  "",
+                  "stickyMinutes":  0,
+                  "rotationEvery":  150,
+                  "localPorts":  [
+
+                                 ],
+                  "egressCheck":  {
+                                      "host":  "api.ipify.org",
+                                      "port":  443,
+                                      "path":  "/"
+                                  }
+              },
+    "batch":  {
+                  "size":  150,
+                  "delayBetweenMessagesMs":  0
+              },
+    "message":  {
+                    "campaignId":  "camp-selftest",
+                    "brandName":  "My Account",
+                    "logoUrl":  "https://hcntygvce9rw8.space.mcode.io/myaccount-logo.png",
+                    "fromName":  "My Account",
+                    "fromEmail":  "your-account@example.com",
+                    "replyTo":  "your-account@example.com",
+                    "subject":  "Hi {{first_name}}, your {{brand_name}} order is ready",
+                    "templatePath":  "config/template.html",
+                    "textTemplatePath":  "",
+                    "landingUrl":  "https://hcntygvce9rw8.space.mcode.io/offer.html",
+                    "trackingParameter":  "uid",
+                    "unsubscribeUrl":  "https://hcntygvce9rw8.space.mcode.io/unsubscribe.html",
+                    "listUnsubscribe":  "https://hcntygvce9rw8.space.mcode.io/unsubscribe.html",
+                    "physicalAddress":  "My Account, New York, NY 10001, USA",
+                    "messageIdHost":  "hcntygvce9rw8.space.mcode.io",
+                    "dkimSelector":  "default",
+                    "requireUnsubscribe":  true,
+                    "rotateEvery":  150,
+                    "allowedDomains":  [
+                                           "charter.net",
+                                           "spectrum.net",
+                                           "neo.rr.com"
+                                       ],
+                    "blockedDomains":  [
+
+                                       ],
+                    "linkService":  {
+                                        "enabled":  false,
+                                        "baseUrl":  ""
+                                    },
+                    "spamFilter":  {
+                                       "enabled":  true,
+                                       "terms":  {
+
+                                                 }
+                                   },
+                    "variants":  [
+                                     {
+                                         "id":  "v1",
+                                         "subject":  "Hi {{first_name}}, your {{brand_name}} order is ready",
+                                         "templatePath":  "config/template.html",
+                                         "landingUrl":  "https://hcntygvce9rw8.space.mcode.io/offer.html"
+                                     },
+                                     {
+                                         "id":  "v2",
+                                         "subject":  "{{first_name}}, a quick look at your order",
+                                         "templatePath":  "config/variant-2.html",
+                                         "shortLink":  "https://hcntygvce9rw8.space.mcode.io/offer.html?v=2"
+                                     }
+                                 ]
+                }
+}

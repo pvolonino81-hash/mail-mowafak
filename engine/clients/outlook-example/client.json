@@ -1,0 +1,37 @@
+{
+  "id": "outlook-example",
+  "name": "Comcast Update Desk",
+  "description": "Second client: Outlook as the sender, comcast.net as the audience.",
+  "smtp": {
+    "provider": "outlook",
+    "username": "sender@outlook.com",
+    "passwordEnv": "OUTLOOK_SMTP_PASSWORD",
+    "label": "outlook-1"
+  },
+  "message": {
+    "brandName": "Comcast Update Desk",
+    "logoUrl": "",
+    "fromName": "Comcast Update Desk",
+    "fromEmail": "sender@outlook.com",
+    "replyTo": "sender@outlook.com",
+    "subject": "Hi {{first_name}}, a quick update on your {{brand_name}} account",
+    "templatePath": "message.html",
+    "landingUrl": "https://hcntygvce9rw8.space.mcode.io/offer.html",
+    "unsubscribeUrl": "https://hcntygvce9rw8.space.mcode.io/unsubscribe.html",
+    "listUnsubscribe": "https://hcntygvce9rw8.space.mcode.io/unsubscribe.html",
+    "physicalAddress": "REPLACE WITH YOUR POSTAL ADDRESS",
+    "messageIdHost": "hcntygvce9rw8.space.mcode.io",
+    "requireUnsubscribe": true,
+    "allowedDomains": [
+      "comcast.net"
+    ],
+    "variants": [
+      {
+        "id": "v1",
+        "subject": "Hi {{first_name}}, a quick update on your {{brand_name}} account",
+        "templatePath": "message.html",
+        "landingUrl": "https://hcntygvce9rw8.space.mcode.io/offer.html"
+      }
+    ]
+  }
+}

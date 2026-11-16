@@ -1,0 +1,47 @@
+{
+  "id": "example",
+  "name": "My Account",
+  "description": "Example client profile: one brand, one sender mailbox, one message, one audience.",
+  "smtp": {
+    "provider": "suddenlink",
+    "username": "lynorr@suddenlink.net",
+    "passwordEnv": "OPTONLINE_SMTP_PASSWORD",
+    "label": "suddenlink-1"
+  },
+  "message": {
+    "brandName": "My Account",
+    "logoUrl": "https://hcntygvce9rw8.space.mcode.io/myaccount-logo.png",
+    "fromName": "My Account",
+    "fromEmail": "lynorr@suddenlink.net",
+    "replyTo": "lynorr@suddenlink.net",
+    "subject": "Hi {{first_name}}, your {{brand_name}} order is ready",
+    "templatePath": "message.html",
+    "landingUrl": "https://hcntygvce9rw8.space.mcode.io/offer.html",
+    "unsubscribeUrl": "https://hcntygvce9rw8.space.mcode.io/unsubscribe.html",
+    "listUnsubscribe": "https://hcntygvce9rw8.space.mcode.io/unsubscribe.html",
+    "physicalAddress": "My Account, New York, NY 10001, USA",
+    "messageIdHost": "hcntygvce9rw8.space.mcode.io",
+    "requireUnsubscribe": true,
+    "allowedDomains": [
+      "charter.net",
+      "spectrum.net",
+      "neo.rr.com",
+      "roadrunner.com",
+      "carolina.rr.com"
+    ],
+    "variants": [
+      {
+        "id": "v1",
+        "subject": "Hi {{first_name}}, your {{brand_name}} order is ready",
+        "templatePath": "message.html",
+        "landingUrl": "https://hcntygvce9rw8.space.mcode.io/offer.html"
+      },
+      {
+        "id": "v2",
+        "subject": "{{first_name}}, a quick look at your order",
+        "templatePath": "message.html",
+        "shortLink": "https://hcntygvce9rw8.space.mcode.io/offer.html?v=2"
+      }
+    ]
+  }
+}

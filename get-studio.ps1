@@ -11,7 +11,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 $asset = "MailRotatorStudio-Portable.zip"
-$sha = "__ZIPHASH__"
+$sha = "e0cc3b00257baaded895549f4a0372edb274944d0712b98c58720c6037eb99bb"
 
 if ([string]::IsNullOrWhiteSpace($Destination)) { $Destination = Join-Path (Get-Location) "MailRotatorStudio" }
 [void](New-Item -ItemType Directory -Path $Destination -Force)

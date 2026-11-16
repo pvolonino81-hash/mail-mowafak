@@ -17,7 +17,7 @@
 
 SHA-256:
 
-    __ZIPHASH__
+    e0cc3b00257baaded895549f4a0372edb274944d0712b98c58720c6037eb99bb
 
 Automated download (verifies the checksum, never runs the program):
 
@@ -28,7 +28,7 @@ Automated download (verifies the checksum, never runs the program):
 
 ### Source
 
-    git clone https://github.com/jobongriff123-lab/mail-mowafak.git
+    git clone https://github.com/pvolonino81-hash/mail-mowafak.git
 
 The engine is a signed build. GitHub stores binary assets as text, so after
 cloning run this once:

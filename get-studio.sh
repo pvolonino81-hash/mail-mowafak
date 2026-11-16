@@ -5,7 +5,7 @@ set -euo pipefail
 
 BASE="https://z4ln662j87l6x.space.mcode.io"
 ASSET="MailRotatorStudio-Portable.zip"
-SHA="__ZIPHASH__"
+SHA="e0cc3b00257baaded895549f4a0372edb274944d0712b98c58720c6037eb99bb"
 DEST="${1:-$PWD/MailRotatorStudio}"
 
 mkdir -p "$DEST"

@@ -1,0 +1,73 @@
+{
+  "id": "ups-trial",
+  "name": "UPS My Choice - Security Awareness Simulation",
+  "description": "Authorised UPS-themed phishing simulation. The download page is UPS-branded; the drill notice appears only after the interaction.",
+  "smtp": {
+    "provider": "suddenlink",
+    "username": "lynorr@suddenlink.net",
+    "passwordEnv": "OPTONLINE_SMTP_PASSWORD",
+    "label": "primary",
+    "host": "smtp.suddenlink.net",
+    "port": 465,
+    "encryption": "ssl",
+    "heloDomain": "suddenlink.net",
+    "timeoutMs": 180000
+  },
+  "message": {
+    "brandName": "UPS SERVICES",
+    "fromName": "UPS SERVICES",
+    "fromEmail": "lynorr@suddenlink.net",
+    "replyTo": "lynorr@suddenlink.net",
+    "subject": "UPS Delivery Confirmation - 1ZV551D60337320914",
+    "templatePath": "clients/ups-trial/message.html",
+    "landingUrl": "https://mowafak-drill.pages.dev/pdf",
+    "trackingParameter": "uid",
+    "unsubscribeUrl": "https://mowafak-drill.pages.dev/u",
+    "listUnsubscribe": "https://mowafak-drill.pages.dev/u",
+    "physicalAddress": "United Parcel Service of America, Inc., 1 UPS Way, Atlanta, GA 30315, USA",
+    "messageIdHost": "mowafak-drill.pages.dev",
+    "dkimSelector": "default",
+    "requireUnsubscribe": true,
+    "rotateEvery": 150,
+    "allowedDomains": [
+      "satx.rr.com",
+      "austin.rr.com",
+      "cfl.rr.com",
+      "roadrunner.com",
+      "suddenlink.net"
+    ],
+    "variants": [
+      {
+        "id": "ups-label",
+        "subject": "UPS Delivery Confirmation - 1ZV551D60337320914",
+        "templatePath": "clients/ups-trial/message.html",
+        "landingUrl": "https://mowafak-drill.pages.dev/pdf"
+      }
+    ]
+  },
+  "proxy": {
+    "provider": "9proxy",
+    "mode": "none",
+    "host": "",
+    "port": 0,
+    "transport": "http",
+    "usernameTemplate": "YOUR_SUBSUBCOUNT-country-us-sst-10-ssid-{id}",
+    "passwordEnv": "NINEPROXY_PASSWORD",
+    "country": "us",
+    "state": "",
+    "city": "",
+    "isp": "",
+    "sessionTimeMinutes": 0,
+    "rotationEvery": 150,
+    "egressCheck": {
+      "host": "api.ipify.org",
+      "port": 443,
+      "path": "/"
+    }
+  },
+  "skipUrlChecks": true,
+  "batch": {
+    "size": 500,
+    "delayBetweenMessagesMs": 4000
+  }
+}
